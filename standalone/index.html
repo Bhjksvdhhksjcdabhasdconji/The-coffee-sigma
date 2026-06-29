@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密cafe - Order System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Home Page -->
+    <div id="homePage" class="page active">
+        <div class="home-container">
+            <div class="header">
+                <h1>密cafe</h1>
+                <p>Welcome take ur time:)</p>
+            </div>
+
+            <div class="cards-container">
+                <!-- Ordering Card -->
+                <button class="card-button" onclick="navigateTo('orderingPage')">
+                    <div class="card">
+                        <div class="card-icon">☕</div>
+                        <h2>下單</h2>
+                        <p>Self ordering</p>
+                    </div>
+                </button>
+
+                <!-- Dashboard Card -->
+                <button class="card-button" onclick="showPasswordDialog()">
+                    <div class="card">
+                        <div class="card-icon">📊</div>
+                        <h2>View Dashboard Staff</h2>
+                        <p>Real-time order tracking</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <span class="checkmark">✓</span>
+                    <p>Instant order placement</p>
+                </div>
+                <div class="feature">
+                    <span class="checkmark">✓</span>
+                    <p>Real-time updates</p>
+                </div>
+                <div class="feature">
+                    <span class="checkmark">✓</span>
+                    <p>Persistent storage</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ordering Page -->
+    <div id="orderingPage" class="page">
+        <div class="ordering-container">
+            <div class="ordering-header">
+                <h1>Café Ordering</h1>
+                <p>Select an item to place an order</p>
+                <button class="back-button" onclick="navigateTo('homePage')">← Back</button>
+            </div>
+
+            <div class="ordering-buttons">
+                <!-- Latte Button -->
+                <button class="order-button latte-button" onclick="placeOrder('Latte')">
+                    <div class="order-icon">☕</div>
+                    <span>心形圖案Latte</span>
+                </button>
+
+                <!-- Heart Art Button -->
+                <button class="order-button heart-button" onclick="placeOrder('Heart Art')">
+                    <div class="order-icon">❤️</div>
+                    <span>兩個心圖案的latte</span>
+                </button>
+            </div>
+
+            <div id="submittingIndicator" class="submitting-indicator" style="display: none;">
+                <div class="pulse"></div>
+                <span>Submitting order...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <div>
+                    <h1>Order Dashboard</h1>
+                    <p>Real-time order tracking</p>
+                </div>
+                <div class="dashboard-buttons">
+                    <button class="btn btn-outline" onclick="refreshOrders()">🔄 Refresh</button>
+                    <button class="btn btn-primary" onclick="navigateTo('orderingPage')">New Order</button>
+                    <button class="btn btn-outline" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <!-- Active Orders Section -->
+            <div class="orders-section">
+                <div class="section-header">
+                    <div class="badge">Active Orders: <span id="activeCount">0</span></div>
+                </div>
+
+                <div id="activeOrdersContainer" class="orders-grid">
+                    <div class="empty-state">
+                        <div class="empty-icon">☕</div>
+                        <p>No active orders. Start taking orders to see them here.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Orders Section -->
+            <div id="completedSection" class="orders-section" style="display: none;">
+                <div class="section-header">
+                    <div class="badge">Completed Orders: <span id="completedCount">0</span></div>
+                </div>
+
+                <div id="completedOrdersContainer" class="orders-grid">
+                </div>
+            </div>
+
+            <!-- Live Updates Indicator -->
+            <div class="live-indicator">
+                <div class="pulse-dot"></div>
+                <span>Live updates enabled</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Dialog -->
+    <div id="passwordDialog" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Staff Access</h2>
+            <p>Enter password to access the dashboard</p>
+            <input type="password" id="passwordInput" placeholder="Enter password" onkeypress="if(event.key==='Enter') verifyPassword()">
+            <div id="passwordError" class="error-message" style="display: none;"></div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="verifyPassword()">Access Dashboard</button>
+                <button class="btn btn-outline" onclick="closePasswordDialog()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Confirmation Popup -->
+    <div id="confirmationPopup" class="confirmation-popup" style="display: none;">
+        <div class="confirmation-content">
+            <div class="success-icon">✓</div>
+            <div class="order-number-label">Order Number</div>
+            <div class="order-number" id="confirmationOrderNumber">#0</div>
+            <div class="order-item" id="confirmationOrderItem">Item</div>
+            <p class="confirmation-message">Order Confirmed!</p>
+            <p class="confirmation-subtext">Your order has been placed successfully</p>
+        </div>
+        <div id="confettiContainer" class="confetti-container"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
