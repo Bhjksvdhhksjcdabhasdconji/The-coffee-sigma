@@ -10,10 +10,10 @@ export default function Home() {
       {/* Header */}
       <div className="mb-16 text-center max-w-2xl">
         <h1 className="text-6xl md:text-7xl font-light tracking-tight text-gray-900 mb-4">
-          Café Ordering System
+          密cafe
         </h1>
         <p className="text-xl text-gray-600 font-light">
-          An elegant, real-time ordering and management system for your café
+          Welcome take ur time:)
         </p>
       </div>
 
@@ -27,11 +27,11 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-amber-200 to-amber-100 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <div className="relative bg-white border-2 border-amber-200 rounded-2xl p-8 hover:border-amber-400 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 text-center">
             <Coffee className="w-12 h-12 text-amber-700 mx-auto mb-4" />
-            <h2 className="text-2xl font-light text-gray-900 mb-2">
-              Place Order
+            <h2 className="text-2xl font-light text-gray-900 mb-2" style={{fontSize: '36px'}}>
+              下單
             </h2>
             <p className="text-sm text-gray-600 font-light">
-              Waiter interface for taking orders
+              Self ordering
             </p>
           </div>
         </button>
