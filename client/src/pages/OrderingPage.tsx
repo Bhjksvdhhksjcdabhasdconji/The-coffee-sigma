@@ -2,15 +2,17 @@ import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { Coffee, Heart } from "lucide-react";
+import OrderConfirmationPopup from "@/components/OrderConfirmationPopup";
 
 export default function OrderingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [lastOrder, setLastOrder] = useState<{ orderNumber: number; item: string } | null>(null);
   
   const submitOrderMutation = trpc.orders.submit.useMutation({
     onSuccess: (order) => {
-      toast.success(`Order #${order.orderNumber} placed: ${order.item}`, {
-        duration: 3000,
-      });
+      setLastOrder({ orderNumber: order.orderNumber, item: order.item });
+      setShowConfirmation(true);
       setIsSubmitting(false);
     },
     onError: (error) => {
@@ -46,9 +48,9 @@ export default function OrderingPage() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-amber-200 to-amber-100 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <div className="relative bg-white border-2 border-amber-200 rounded-2xl px-12 py-16 hover:border-amber-400 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
-            <Coffee className="w-16 h-16 text-amber-700 mx-auto mb-4" />
+            <Coffee className="w-16 h-16 text-amber-700 mx-auto mb-4" style={{backgroundColor: '#ebebeb'}} />
             <span className="text-2xl font-light text-gray-900 block tracking-wide">
-              Latte
+              心形圖案Latte
             </span>
           </div>
         </button>
@@ -63,13 +65,11 @@ export default function OrderingPage() {
           <div className="relative bg-white border-2 border-rose-200 rounded-2xl px-12 py-16 hover:border-rose-400 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
             <Heart className="w-16 h-16 text-rose-600 mx-auto mb-4 fill-current" />
             <span className="text-2xl font-light text-gray-900 block tracking-wide">
-              Heart Art
+              兩個心圖案的latte
             </span>
           </div>
         </button>
       </div>
-
-
 
       {/* Status Indicator */}
       {isSubmitting && (
@@ -79,6 +79,16 @@ export default function OrderingPage() {
             <span className="text-sm font-light">Submitting order...</span>
           </div>
         </div>
+      )}
+
+      {/* Order Confirmation Popup */}
+      {lastOrder && (
+        <OrderConfirmationPopup
+          orderNumber={lastOrder.orderNumber}
+          item={lastOrder.item}
+          isVisible={showConfirmation}
+          onDismiss={() => setShowConfirmation(false)}
+        />
       )}
     </div>
   );
