@@ -139,3 +139,15 @@ export async function getAllOrders(): Promise<Order[]> {
 
   return db.select().from(orders).orderBy(desc(orders.createdAt));
 }
+
+/**
+ * Delete an order by ID.
+ */
+export async function deleteOrder(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.delete(orders).where(eq(orders.id, id));
+}

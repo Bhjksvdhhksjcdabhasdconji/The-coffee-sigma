@@ -32,3 +32,9 @@
 - [x] Verify database persistence
 - [x] Polish UI and animations
 - [x] Create checkpoint
+
+## Clear Order Feature
+- [x] Create tRPC procedure to delete an order by ID
+- [x] Add delete button to each order card on dashboard
+- [x] Implement optimistic UI update when deleting
+- [x] Add confirmation or toast feedback on deletion

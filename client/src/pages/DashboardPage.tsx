@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
-import { Coffee, Heart, RefreshCw } from "lucide-react";
+import { Coffee, Heart, RefreshCw, X } from "lucide-react";
+import { toast } from "sonner";
 import type { Order } from "../../../drizzle/schema";
 
 const POLL_INTERVAL = 2000; // Poll every 2 seconds for new orders
@@ -14,6 +15,16 @@ export default function DashboardPage() {
 
   const { data: ordersData, refetch } = trpc.orders.list.useQuery(undefined, {
     refetchInterval: POLL_INTERVAL,
+  });
+
+  const deleteOrderMutation = trpc.orders.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Order cleared", { duration: 2000 });
+      refetch();
+    },
+    onError: (error) => {
+      toast.error(`Failed to clear order: ${error.message}`);
+    },
   });
 
   useEffect(() => {
@@ -131,13 +142,23 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Timestamp */}
-                <div className="text-xs text-gray-600 font-light">
+                <div className="text-xs text-gray-600 font-light mb-4">
                   {new Date(order.createdAt).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                     second: "2-digit",
                   })}
                 </div>
+
+                {/* Clear Order Button */}
+                <button
+                  onClick={() => deleteOrderMutation.mutate({ id: order.id })}
+                  disabled={deleteOrderMutation.isPending}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-light text-gray-700 bg-white/50 hover:bg-white/80 border border-gray-200 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <X className="w-4 h-4" />
+                  Clear Order
+                </button>
               </div>
             ))}
           </div>

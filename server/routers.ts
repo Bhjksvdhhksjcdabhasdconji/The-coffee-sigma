@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
-import { createOrder, getAllOrders } from "./db";
+import { createOrder, getAllOrders, deleteOrder } from "./db";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -30,6 +30,12 @@ export const appRouter = router({
       const allOrders = await getAllOrders();
       return allOrders;
     }),
+    delete: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await deleteOrder(input.id);
+        return { success: true };
+      }),
   })
 });
 
