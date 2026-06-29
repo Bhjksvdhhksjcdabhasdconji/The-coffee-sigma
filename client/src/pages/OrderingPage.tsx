@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
-import { useLocation } from "wouter";
 import { Coffee, Heart } from "lucide-react";
 
 export default function OrderingPage() {
-  const [, setLocation] = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const submitOrderMutation = trpc.orders.submit.useMutation({
@@ -72,16 +69,7 @@ export default function OrderingPage() {
         </button>
       </div>
 
-      {/* Navigation */}
-      <div className="flex gap-4">
-        <Button
-          variant="outline"
-          onClick={() => setLocation("/dashboard")}
-          className="px-8 py-2 text-sm border-gray-300 hover:border-gray-400"
-        >
-          View Dashboard
-        </Button>
-      </div>
+
 
       {/* Status Indicator */}
       {isSubmitting && (
