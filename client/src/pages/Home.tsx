@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Coffee, BarChart3 } from "lucide-react";
+import StaffPasswordDialog from "@/components/StaffPasswordDialog";
 
 export default function Home() {
   const [, setLocation] = useLocation();
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-rose-50 flex flex-col items-center justify-center px-4">
@@ -38,14 +41,14 @@ export default function Home() {
 
         {/* Dashboard Card */}
         <button
-          onClick={() => setLocation("/dashboard")}
+          onClick={() => setShowPasswordDialog(true)}
           className="group relative"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-100 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <div className="relative bg-white border-2 border-slate-200 rounded-2xl p-8 hover:border-slate-400 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 text-center">
             <BarChart3 className="w-12 h-12 text-slate-700 mx-auto mb-4" />
             <h2 className="text-2xl font-light text-gray-900 mb-2">
-              View Dashboard
+              View Dashboard Staff
             </h2>
             <p className="text-sm text-gray-600 font-light">
               Real-time order tracking
@@ -71,6 +74,13 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Staff Password Dialog */}
+      <StaffPasswordDialog
+        open={showPasswordDialog}
+        onOpenChange={setShowPasswordDialog}
+        onSuccess={() => setLocation("/dashboard")}
+      />
     </div>
   );
 }

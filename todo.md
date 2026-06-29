@@ -38,3 +38,10 @@
 - [x] Add delete button to each order card on dashboard
 - [x] Implement optimistic UI update when deleting
 - [x] Add confirmation or toast feedback on deletion
+
+## Dashboard Password Protection
+- [x] Create password authentication modal/dialog
+- [x] Add tRPC procedure to verify staff password
+- [x] Implement password check before accessing dashboard
+- [x] Store password in environment variables (STAFF_PASSWORD)
+- [x] Add password input validation and error handling
