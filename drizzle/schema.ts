@@ -25,4 +25,16 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Orders table for café ordering system.
+ * Stores each order with a unique sequential order number.
+ */
+export const orders = mysqlTable("orders", {
+  id: int("id").autoincrement().primaryKey(),
+  orderNumber: int("orderNumber").notNull().unique(),
+  item: varchar("item", { length: 64 }).notNull(), // "Latte" or "Heart Art"
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Order = typeof orders.$inferSelect;
+export type InsertOrder = typeof orders.$inferInsert;

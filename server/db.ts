@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, orders, Order } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,53 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+/**
+ * Get the next order number by finding the maximum existing order number.
+ */
+export async function getNextOrderNumber(): Promise<number> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.select().from(orders).orderBy(desc(orders.orderNumber)).limit(1);
+  const lastOrder = result[0];
+  return (lastOrder?.orderNumber || 0) + 1;
+}
+
+/**
+ * Create a new order with the given item.
+ */
+export async function createOrder(item: string): Promise<Order> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const orderNumber = await getNextOrderNumber();
+  const result = await db.insert(orders).values({
+    orderNumber,
+    item,
+  });
+
+  // Fetch and return the created order
+  const createdOrder = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.orderNumber, orderNumber))
+    .limit(1);
+
+  return createdOrder[0]!;
+}
+
+/**
+ * Get all orders sorted by creation time (newest first).
+ */
+export async function getAllOrders(): Promise<Order[]> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return db.select().from(orders).orderBy(desc(orders.createdAt));
+}

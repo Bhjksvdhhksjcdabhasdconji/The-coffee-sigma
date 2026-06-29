@@ -2,6 +2,8 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
+import { createOrder, getAllOrders } from "./db";
+import { z } from "zod";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -17,12 +19,18 @@ export const appRouter = router({
     }),
   }),
 
-  // TODO: add feature routers here, e.g.
-  // todo: router({
-  //   list: protectedProcedure.query(({ ctx }) =>
-  //     db.getUserTodos(ctx.user.id)
-  //   ),
-  // }),
+  orders: router({
+    submit: publicProcedure
+      .input(z.object({ item: z.enum(["Latte", "Heart Art"]) }))
+      .mutation(async ({ input }) => {
+        const order = await createOrder(input.item);
+        return order;
+      }),
+    list: publicProcedure.query(async () => {
+      const allOrders = await getAllOrders();
+      return allOrders;
+    }),
+  })
 });
 
 export type AppRouter = typeof appRouter;
