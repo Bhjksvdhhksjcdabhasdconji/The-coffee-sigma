@@ -1,0 +1,2 @@
+ALTER TABLE `orders` ADD `status` enum('Pending','Ready','Completed') DEFAULT 'Pending' NOT NULL;--> statement-breakpoint
+ALTER TABLE `orders` ADD `updatedAt` timestamp DEFAULT (now()) NOT NULL ON UPDATE CURRENT_TIMESTAMP;

@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
-import { createOrder, getAllOrders, deleteOrder } from "./db";
+import { createOrder, getAllOrders, deleteOrder, updateOrderStatus } from "./db";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
@@ -36,6 +36,12 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         await deleteOrder(input.id);
         return { success: true };
+      }),
+    updateStatus: publicProcedure
+      .input(z.object({ id: z.number(), status: z.enum(["Pending", "Ready", "Completed"]) }))
+      .mutation(async ({ input }) => {
+        const order = await updateOrderStatus(input.id, input.status);
+        return order;
       }),
   }),
 

@@ -151,3 +151,21 @@ export async function deleteOrder(id: number): Promise<void> {
 
   await db.delete(orders).where(eq(orders.id, id));
 }
+
+/**
+ * Update order status.
+ */
+export async function updateOrderStatus(id: number, status: "Pending" | "Ready" | "Completed"): Promise<Order> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const updated = await db
+    .update(orders)
+    .set({ status, updatedAt: new Date() })
+    .where(eq(orders.id, id));
+
+  const result = await db.select().from(orders).where(eq(orders.id, id)).limit(1);
+  return result[0]!;
+}

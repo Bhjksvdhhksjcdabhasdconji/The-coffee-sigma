@@ -45,3 +45,13 @@
 - [x] Implement password check before accessing dashboard
 - [x] Store password in environment variables (STAFF_PASSWORD)
 - [x] Add password input validation and error handling
+
+## Order Status Workflow
+- [x] Add status column to orders table (Pending, Ready, Completed)
+- [x] Create database migration for status column
+- [x] Add tRPC procedure to update order status
+- [x] Update dashboard UI to show order status badges
+- [x] Add status update button on each order card
+- [x] Implement status transition logic (Pending → Ready → Completed)
+- [x] Add visual indicators for different statuses
+- [x] Test status workflow end-to-end

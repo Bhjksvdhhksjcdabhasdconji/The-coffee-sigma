@@ -33,7 +33,9 @@ export const orders = mysqlTable("orders", {
   id: int("id").autoincrement().primaryKey(),
   orderNumber: int("orderNumber").notNull().unique(),
   item: varchar("item", { length: 64 }).notNull(), // "Latte" or "Heart Art"
+  status: mysqlEnum("status", ["Pending", "Ready", "Completed"]).default("Pending").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
 export type Order = typeof orders.$inferSelect;
